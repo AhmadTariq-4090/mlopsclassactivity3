@@ -1,0 +1,30 @@
+MLOps Class Activity — CI/CD in ML
+
+1. How does CI/CD improve collaboration in ML teams?
+CI/CD improves collaboration by automating the repetitive parts of an ML workflow, such as preprocessing, training, and evaluation. 
+It ensures that all team members work on the same reproducible pipeline and model artifacts. 
+When code is pushed, GitHub Actions (or any CI/CD tool) automatically tests, trains, and evaluates models, preventing “it works on my machine” issues. 
+It also encourages version control, shared experiment tracking, and faster feedback between data scientists, ML engineers, and DevOps teams.
+
+2. What happens if the evaluation score is below a defined threshold?
+If the evaluation score (e.g., accuracy, F1-score) is below a defined threshold, the CI/CD pipeline can be configured to fail the workflow. 
+This prevents deployment of underperforming models. 
+A simple way to enforce this is by adding a conditional check in the evaluation step that exits with a non-zero code if the metric falls below the threshold. 
+This acts as a quality gate, ensuring only validated models move forward to production or registry stages.
+
+3. How can retraining or drift detection be integrated into this workflow?
+Retraining and drift detection can be integrated as additional scheduled jobs or workflow triggers. 
+For example:
+- Add a cron schedule in GitHub Actions (e.g., run daily/weekly) to retrain the model on new data.
+- Integrate data drift detection scripts (e.g., using EvidentlyAI or scikit-multiflow) that monitor production data. 
+  If drift is detected beyond a threshold, the workflow can automatically trigger retraining or create a pull request to update the model.
+This ensures continuous adaptation and model freshness.
+
+4. What steps are needed to deploy this workflow to production (e.g., AWS, Kubernetes)?
+To deploy this workflow to production:
+- Containerize the ML service with a Dockerfile (as done for training and serving).
+- Push the image to a container registry (DockerHub, AWS ECR, or GCR).
+- Use CI/CD to automatically deploy to a cloud platform such as AWS (SageMaker, ECS, or EKS) or Kubernetes.
+- Define deployment manifests (Helm charts, YAML) for Kubernetes and apply them using kubectl or GitHub Actions.
+- Add monitoring and alerting for model performance, latency, and drift.
+This closes the MLOps loop — enabling continuous integration, continuous delivery, and continuous training (CT).
